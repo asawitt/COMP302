@@ -1,27 +1,18 @@
 open System
 
-(* Assignment 3 *) (* Do not edit this line. *)
-(* Student name: Asa Witt, Id Number: 260631573 *) (* Edit this line. *)
+(* Assignment 3 *)
+(* Student name: Asa Witt, Id Number: 260631573 *)
 (* Question 1 *)
 type Cell = { data : int; next : RList}
 and RList = Cell option ref
-(* For testing.  Uncomment if you want to use them.
-let c1 = {data = 1; next = ref None}
-let c2 = {data = 2; next = ref (Some c1)}
-let c3 = {data = 3; next = ref (Some c2)}
-let c5 = {data = 5; next = ref (Some c3)}
-*)
+
 (* This converts an RList to an ordinary list. *)
 let rec displayList (c : RList) =
   match !c with
     | None -> []
     | Some { data = d; next = l } -> d :: (displayList l)
 
-(* This may be useful.  You don't have to use it.*)
 let cellToRList (c:Cell):RList = ref (Some c)
-
-(* Example for testing. *)
-let bigger(x:int, y:int) = (x > y)
 
 let rec insert comp (item: int) (list: RList) =
   match !list with
@@ -29,7 +20,6 @@ let rec insert comp (item: int) (list: RList) =
   |None -> list := Some ({data = item; next = ref None})
 
 (* Question 2*)
-
 type transaction = Withdraw of int | Deposit of int | CheckBalance
 
 let make_protected_account(opening_balance: int,password: string) =

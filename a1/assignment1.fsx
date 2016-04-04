@@ -1,6 +1,5 @@
-(* Assignment 1 *) (* Do not edit this line. *)
-(* Question 1 *) (* Do not edit this line. *)
-
+(* Assignment 1 *)
+(* Question 1 *)
 (* val sumlist : l:float list -> float *)
 let rec sumlist l =
   match l with
@@ -39,9 +38,8 @@ let variance l =
   match l with
   |x::xs -> float (sumlist (squarelist (mean_diffs l))) / double (length l)
   | [] -> 0.
-(* End of question 1 *) (* Do not edit this line. *)
 
-(* Question 2 *) (* Do not edit this line. *)
+(* Question 2 *)
 
 (* val memberof : 'a * 'a list -> bool when 'a : equality *)
 let rec memberof l =
@@ -54,20 +52,15 @@ let rec remove l  =
   match l with
   |(a, []) -> []
   |(a, x::xs) -> if a=x then xs else x::remove (a,xs)
-(* End of question 2 *) (* Do not edit this line *)
 
-(* Question 3 *) (* Do not edit this line *)
+(* Question 3 *)
 
 (* val isolate : l:'a list -> 'a list when 'a : equality *)
 let rec isolate l =
   match l with
   | [] -> l
   | x::xs -> if memberof (x, xs) then isolate xs else x :: isolate xs
-
-(* End of question 3 *) (* Do not edit this line *)
-
-(* Question 4 *) (* Do not edit this line *)
-
+(* Question 4 *)
 (* val common : 'a list * 'a list -> 'a list when 'a : equality *)
 let rec common l =
   match l with
@@ -80,9 +73,7 @@ let rec common l =
     else if memberof(z, x::xs)
       then isolate (z::common (x::xs, zs))
     else isolate (common (xs,zs))
-(* End of question 4 *) (* Do not edit this line *)
-
-(* Question 5 *) (* Do not edit this line *)
+(* Question 5 *)
 
 (* val split : l:'a list -> 'a list * 'a list *)
 let rec split l =
@@ -110,4 +101,3 @@ let rec mergesort l =
     | x::xs ->
       match split l with
       | (a,b) -> merge(mergesort a, mergesort b)
-(* End of question 5 *) (* Do not edit this line *)

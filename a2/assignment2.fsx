@@ -1,5 +1,5 @@
 open System
-(* Assignment 2 *) (* Do not edit this line. *)
+(* Assignment 2 *)
 (* Student name: Asa Witt, Id Number: 260631573 *)
 (* Question 1 *)
 let deriv (f, dx: float) = fun x -> ((f(x + dx) - f(x))/dx)
@@ -10,11 +10,6 @@ let rec newton(f,guess:float,tol:float,dx:float) =
   if abs (f guess) < tol then guess else newton (f,next_term guess,tol,dx)
 
 (* val newton : f:(float -> float) * guess:float * tol:float * dx:float -> float *)
-
-(* For testing
-let make_cubic(a:float,b,c) = fun x -> (x*x*x + a * x*x + b*x + c);;
-newton(make_cubic(2.0,-3.0,1.0),0.0,0.0001,0.0001);;
-*)
 
 (* Question 2 *)
 
@@ -36,24 +31,12 @@ let rec atp(t:term,p:poly):poly =
   match p with
   |x::xs -> match x with |(a,b) -> match t with |(c,d) -> if (b=d) then (a+c,b)::xs else if (b<d) then (c,d)::p else x::atp(t,xs)
   |[] -> [t]
-(* val atp : t:term * p:poly -> poly *)
-(* Add two polynomials.  The result must be properly represented. This means you
-cannot have more than one term with the same exponent, you should not have a
-term with a zero coefficient, except when the whole polynomial is zero and the
-terms should be decreasing order of exponents.   Thus, for example,
-5.2 x^7 - 3.8 x^4 +2.0 x - 1729.0 should be represented as
-[(5.2,7);(-3.8,4);(2.0,1);(-1729.0,0)] *)
+
 let rec addpolys(p1:poly,p2:poly):poly =
   match p1 with
   | x::xs -> addpolys (xs,atp (x,p2))
   |[]-> p2
 
-(* val addpolys : p1:poly * p2:poly -> poly *)
-(*let rec sanitize p =
-  printfn "Sanitized again"
-  match p with
-  |x::xs -> sanitize (atp (x, san_poly))
-  |[] -> san_poly*)
 (* Multiply two polynomials.  All the remarks above apply here too. Raise an
 exception if one of the polynomials is the empty list. *)
 let multpolys(p1:poly,p2:poly) =
@@ -69,8 +52,6 @@ let multpolys(p1:poly,p2:poly) =
     |[]-> []
   sanitize (List.concat (recmultpolys(p1,p2)))
 (* val multpolys : p1:poly * p2:poly -> poly *)
-(* This is the tail-recursive version of Russian peasant exponentiation.  I have
-done it for you.  You will need it for the next question.  *)
 let exp(b:float, e:int) =
   let rec helper(b:float, e:int, a: float) =
     if (b = 0.0) then 0.0
@@ -81,26 +62,17 @@ let exp(b:float, e:int) =
 (* Here is how you evaluate a term. *)
 let evalterm (v:float) ((c,e):term) = if (e=0) then c else c * exp(v,e)
 
-(* Evaluate a polynomial viewed as a function of the indeterminate.  Use the function
-above and List.fold and List.map and a dynamically created function for a one-line
-answer.  *)
 let rec evalpoly(p:poly,v:float):float =
   match p with
   |x::xs -> evalterm v x + evalpoly (xs,v)
   |[] -> 0.
 (* val evalpoly : p:poly * v:float -> float *)
-(* Compute the derivative of a polynomial as a symbolic representation.  Do NOT use
-deriv defined above.  I want the answer to be a polynomial represented as a list.
-I have done a couple of lines so you can see how to raise an exception.  *)
 let rec diff (p:poly):poly =
     match p with
       | [] -> []
       | x::xs -> match x with | (a,b) -> if (b<=0) then (0.,0)::diff xs else (a*float b,b-1)::diff xs
 (*  val diff : p:poly -> poly *)
 (* Question 3 *)
-(* Most of these functions are only one or two lines.  One of them, the longest is
-about 5 lines.  However, they require some thought.  They are short because I used
-the Set library functions wherever I could.  I especially found Set.fold useful. *)
 type Country = string
 type Chart = Set<Country*Country>
 type Colour = Set<Country>
@@ -119,7 +91,6 @@ let canBeExtBy col ct chart =
    val canBeExtBy :
   col:Set<'a> -> ct:'a -> chart:Set<'a * 'a> -> bool when 'a : comparison
 *)
-(* Here you have to extend a colouring by a fixed country. *)
 let rec extColouring (chart: Chart) (colours : Colouring) (country : Country) =
   if not (Set.isEmpty colours) then
     if (canBeExtBy (Set.minElement colours) country chart) then
@@ -130,8 +101,6 @@ let rec extColouring (chart: Chart) (colours : Colouring) (country : Country) =
 val extColouring :
   chart:Chart -> colours:Colouring -> country:Country -> Set<Set<Country>>
 *)
-(* This collects the names of the countries in the chart.  A good place
-to use Set.fold *)
 let countriesInChart (chart: Chart) =
   Set.fold (fun (acc:Set<Country>) ((a,b): (Country*Country)) ->
   if (not (Set.contains a acc) && not (Set.contains b acc)) then
@@ -147,10 +116,6 @@ let colourTheCountries (chart: Chart)  =
   Set.fold (fun (acc:Set<Set<Country>>) (x:Country) -> (extColouring chart acc x)) Set.empty (countriesInChart chart)
 (* val colourTheCountries : chart:Chart -> Colouring *)
 (* Question 4 *)
-(* These functions are a bit longer but easier to code than Q3.  It is very similar
-to the evaluator that I showed in class.  However I have used the Option type so that
-the program gracefully returns None if no value is found.  This can be preferred to
-raising an exception in some situations.  Learn option types from the web.  *)
 type Exptree =
   | Const of int
   | Var of string
@@ -171,9 +136,6 @@ let rec insert(name:string, value: int, b: Bindings) =
   |x::xs -> if (name <= fst x) then (name,value)::b else insert(name,value,xs)
   |[] -> [(name,value)]
 (* val insert : name:string * value:int * b:Bindings -> (string * int) list*)
-(* The recursive evaluator. If a variable is not
-found returns None.  If you are applying an operator to None and something else the
-answer is None. *)
 let rec eval(exp : Exptree, env:Bindings) =
   match exp with
   |Add (a,b) ->
